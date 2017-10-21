@@ -1,24 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" systemVersion="17A277" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="HelveticaNeue.ttc">
+            <string>HelveticaNeue</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="MemeEditor" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CM9-Ue-GW3">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                <items>
+                                    <navigationItem id="Kgu-zM-GY8">
+                                        <barButtonItem key="leftBarButtonItem" title="Share" id="WBw-b6-Ex7"/>
+                                        <barButtonItem key="rightBarButtonItem" title="Cancel" id="3tl-ro-oiS"/>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="GSx-SK-5PL">
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <items>
+                                    <barButtonItem title="Camera" id="Sch-98-rMe"/>
+                                    <barButtonItem title="Album" id="9aB-YO-6VM"/>
+                                </items>
+                            </toolbar>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Top Text" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5cc-iN-tvi">
+                                <rect key="frame" x="0.0" y="44" width="375" height="47"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="40"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="umQ-Va-iCi">
+                                <rect key="frame" x="0.0" y="44" width="375" height="579"/>
+                            </imageView>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Bottom Text" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="PmD-tt-c7v">
+                                <rect key="frame" x="0.0" y="569" width="375" height="54"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="54" id="cOD-Z4-fCA"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="40"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="PmD-tt-c7v" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="1Ut-pE-EFs"/>
+                            <constraint firstItem="GSx-SK-5PL" firstAttribute="top" secondItem="PmD-tt-c7v" secondAttribute="bottom" id="C2f-GV-xna"/>
+                            <constraint firstItem="CM9-Ue-GW3" firstAttribute="leading" secondItem="5cc-iN-tvi" secondAttribute="leading" id="C31-jM-MMi"/>
+                            <constraint firstItem="CM9-Ue-GW3" firstAttribute="leading" secondItem="GSx-SK-5PL" secondAttribute="leading" id="FSO-7I-jAx"/>
+                            <constraint firstItem="5cc-iN-tvi" firstAttribute="top" secondItem="CM9-Ue-GW3" secondAttribute="bottom" id="Fba-re-uLx"/>
+                            <constraint firstItem="5cc-iN-tvi" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Hf3-le-URD"/>
+                            <constraint firstItem="5cc-iN-tvi" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Oip-Rl-F2i"/>
+                            <constraint firstItem="umQ-Va-iCi" firstAttribute="top" secondItem="CM9-Ue-GW3" secondAttribute="bottom" id="Qyq-eh-D7B"/>
+                            <constraint firstItem="CM9-Ue-GW3" firstAttribute="trailing" secondItem="5cc-iN-tvi" secondAttribute="trailing" id="Voz-Hl-Pnq"/>
+                            <constraint firstItem="GSx-SK-5PL" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="WPY-Ed-RP9"/>
+                            <constraint firstItem="umQ-Va-iCi" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="ch1-y4-NIq"/>
+                            <constraint firstItem="CM9-Ue-GW3" firstAttribute="trailing" secondItem="GSx-SK-5PL" secondAttribute="trailing" id="htc-0q-TFO"/>
+                            <constraint firstItem="CM9-Ue-GW3" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="jOJ-Xk-jSa"/>
+                            <constraint firstItem="GSx-SK-5PL" firstAttribute="top" secondItem="umQ-Va-iCi" secondAttribute="bottom" id="kpw-Hk-Axf"/>
+                            <constraint firstItem="PmD-tt-c7v" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="qdA-A7-kdx"/>
+                            <constraint firstItem="umQ-Va-iCi" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="uA9-5F-MNT"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="136.80000000000001" y="133.5832083958021"/>
         </scene>
     </scenes>
 </document>
