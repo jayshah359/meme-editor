@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -24,9 +24,12 @@
                         <subviews>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CM9-Ue-GW3">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="2RZ-lx-f2j"/>
+                                </constraints>
                                 <items>
                                     <navigationItem id="Kgu-zM-GY8">
-                                        <barButtonItem key="leftBarButtonItem" title="Share" id="WBw-b6-Ex7">
+                                        <barButtonItem key="leftBarButtonItem" systemItem="action" id="WBw-b6-Ex7">
                                             <connections>
                                                 <action selector="shareMeme:" destination="BYZ-38-t0r" id="Ran-yi-eJf"/>
                                             </connections>
@@ -41,17 +44,23 @@
                             </navigationBar>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="GSx-SK-5PL">
                                 <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="uJd-mG-gMQ"/>
+                                </constraints>
                                 <items>
-                                    <barButtonItem title="Camera" id="Sch-98-rMe">
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="xfA-GE-heE"/>
+                                    <barButtonItem systemItem="camera" id="Sch-98-rMe">
                                         <connections>
                                             <action selector="pickImageFromCamera:" destination="BYZ-38-t0r" id="32V-lm-sFI"/>
                                         </connections>
                                     </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="HDM-3j-p9z"/>
                                     <barButtonItem title="Album" id="9aB-YO-6VM">
                                         <connections>
                                             <action selector="pickImage:" destination="BYZ-38-t0r" id="6Fr-qv-m56"/>
                                         </connections>
                                     </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="yha-yf-THt"/>
                                 </items>
                             </toolbar>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="umQ-Va-iCi">
@@ -70,7 +79,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="PmD-tt-c7v" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="1Ut-pE-EFs"/>
                             <constraint firstItem="GSx-SK-5PL" firstAttribute="top" secondItem="PmD-tt-c7v" secondAttribute="bottom" id="C2f-GV-xna"/>
@@ -95,7 +104,9 @@
                         <outlet property="bottomTextField" destination="PmD-tt-c7v" id="PL3-UT-Ycr"/>
                         <outlet property="cameraButton" destination="Sch-98-rMe" id="e4k-fZ-QXw"/>
                         <outlet property="memeImage" destination="umQ-Va-iCi" id="Xgf-Zc-FWF"/>
+                        <outlet property="navBar" destination="CM9-Ue-GW3" id="Pn0-LU-ndU"/>
                         <outlet property="shareButton" destination="WBw-b6-Ex7" id="hGj-7i-n9G"/>
+                        <outlet property="toolBar" destination="GSx-SK-5PL" id="QZi-df-ANg"/>
                         <outlet property="topTextField" destination="5cc-iN-tvi" id="1Mp-qn-jcC"/>
                     </connections>
                 </viewController>
