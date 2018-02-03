@@ -19,7 +19,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 	@IBOutlet weak var navBar: UINavigationBar!
 	@IBOutlet weak var toolBar: UIToolbar!
 	
-	//Struct to store meme when using save function and future functionality
+	// Struct to store meme when using save function and future functionality
 	struct Meme {
 		let topText: String
 		let bottomText: String
@@ -27,13 +27,13 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 		let memedImage: UIImage
 	}
 	
-	//Optional instance of Meme struct to hold meme after "saving"
+	// Optional instance of Meme struct to hold meme after "saving"
 	var meme: Meme?
-	//Variable to keep track of active text field to be used to slide up current view
+	// Variable to keep track of active text field to be used to slide up current view
 	var activeTextField: UITextField?
 	
-	//Define the text attributes for the meme text. black stroke, white text, Helvetica font
-	//-3.0 stroke widht needed for the stroke to apply to the exterior so the font color will work
+	// Define the text attributes for the meme text. black stroke, white text, Helvetica font
+	// -3.0 stroke widht needed for the stroke to apply to the exterior so the font color will work
 	let memeTextAttributes:[String:Any] = [
 		NSAttributedStringKey.strokeColor.rawValue: UIColor.black,
 		NSAttributedStringKey.foregroundColor.rawValue: UIColor.white,
@@ -41,10 +41,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 		NSAttributedStringKey.strokeWidth.rawValue: -3.0]
 	
 	// MARK: UIImagePickerControllerDelegate functions
+	// Handles user cancellation of image picker
 	func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
 		dismiss(animated: true, completion: nil)
 	}
 	
+	// Handles setting the image when the user uses the image picker
 	func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
 		if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
 			memeImage.image = image
@@ -56,11 +58,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 	}
 	
 	// MARK: UITextFieldDelegate functions
+	// On return from a text field, resign the fist responder
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 		textField.resignFirstResponder()
 		return true
 	}
 	
+	// If editing in a text field, note the active text field and if it has the default text in order to clear the default
+	// text value. keyboardWillShow() will make use of the activeTextField
 	func textFieldDidBeginEditing(_ textField: UITextField) {
 		activeTextField = textField
 		if (textField == topTextField && textField.text == "TOP") || (textField == bottomTextField && textField.text == "BOTTOM") {
@@ -71,6 +76,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view, typically from a nib.
+		// Set up default text field values
 		topTextField.text = "TOP"
 		topTextField.defaultTextAttributes = memeTextAttributes
 		topTextField.textAlignment = .center
@@ -79,6 +85,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 		bottomTextField.defaultTextAttributes = memeTextAttributes
 		bottomTextField.textAlignment = .center
 		
+		// Set delegates
 		topTextField.delegate = self
 		bottomTextField.delegate = self
 		
@@ -87,6 +94,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(true)
+		// enable the camera button if possible, subscribe to keyboard notifications
 		cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
 		subscribeToKeyboardNotifications()
 	}
@@ -97,15 +105,19 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 	}
 	
 	@objc func keyboardWillShow(_ notification: Notification) {
+		// when the keyboard activates, look at the activeTextField in order to shift the view up if needed for
+		// the bottom text field.
 		if activeTextField == bottomTextField {
 			view.frame.origin.y -= getKeyboardHeight(notification)
 		}
 	}
 	
 	@objc func keyboardWillHide(_ notifcation: Notification) {
-			view.frame.origin.y = 0
+		// Shift the view back when the keyboard hides
+		view.frame.origin.y = 0
 	}
 	
+	// Calculate the keyboard height in order to shift the view if needed.
 	func getKeyboardHeight(_ notification: Notification) -> CGFloat {
 		let userInfo = notification.userInfo
 		let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue
@@ -123,64 +135,57 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 	}
 	
 	// MARK: IBAction functions
-	//Pick image from library
+	// Pick image from library
 	@IBAction func pickImage(_ sender: Any) {
+		// Create image picker and present it
 		let pickerController = UIImagePickerController()
 		pickerController.delegate = self
 		pickerController.sourceType = .photoLibrary
 		present(pickerController, animated: true, completion: nil)
 	}
 	
-	//Pick image from Camera
+	// Pick image from Camera
 	@IBAction func pickImageFromCamera(_ sender: Any) {
+		// Create image picker and present it
 		let pickerController = UIImagePickerController()
 		pickerController.delegate = self
 		pickerController.sourceType = .camera
 		present(pickerController, animated: true, completion: nil)
 	}
 	
-	//Share button pressed
+	// Share button pressed
 	@IBAction func shareMeme(_ sender: Any) {
+		// Generate the meme Image
 		let memedImage = generateMemedImage()
 		let shareViewController = UIActivityViewController(activityItems: [memedImage], applicationActivities: nil)
+		// Present the share view contrller and on completion save the meme Image, text and original image into meme.
 		present(shareViewController, animated: true) {
 			self.meme = Meme(topText: self.topTextField.text!, bottomText: self.bottomTextField.text!, originalImage: self.memeImage.image!, memedImage: memedImage)
 		}
 	}
 	
-	//Cancel button pressed
+	// Cancel button pressed
 	@IBAction func cancelMeme(_ sender: Any) {
+		// Reset the Meme Image and buttons, reset the text field values
 		memeImage.image = nil
 		shareButton.isEnabled = false
 		topTextField.text = "TOP"
 		bottomTextField.text = "BOTTOM"
 		
-		//dismiss keyboard
+		// Dismiss Keyboard
 		topTextField.resignFirstResponder()
 		bottomTextField.resignFirstResponder()
-		
-		//delete meme?
 	}
 	
+	// Take the current display, hide the Nav bar and Tool bar, and resize the image as needed, in order to return an
+	// image we can save that shows the whole Meme Image.
 	func generateMemedImage() -> UIImage {
 		
-		// TODO: Hide toolbar and navbar
-//		let navHeight = navBar.frame.size.height
-//		let toolHeight = toolBar.frame.size.height
-//		navBar.frame.size.height = 0
-//		toolBar.frame.size.height = 0
 		navBar.isHidden = true
 		toolBar.isHidden = true
-//		self.view.updateConstraintsIfNeeded()
-//		self.view.setNeedsLayout()
-//		self.view.layoutIfNeeded()
+
 		memeImage.frame.origin.y -= navBar.frame.size.height
 		memeImage.frame.size.height += navBar.frame.size.height + toolBar.frame.size.height
-		topTextField.frame.origin.y -= navBar.frame.size.height
-		bottomTextField.frame.origin.y += toolBar.frame.size.height
-//		self.view.frame.origin.y -= navBar.frame.size.height
-//		self.view.frame.size.height -= toolBar.frame.size.height
-//		memeImage.frame.size.height += navBar.frame.size.height + toolBar.frame.size.height
 		
 		// Render view to an image
 		UIGraphicsBeginImageContext(self.view.frame.size)
@@ -188,21 +193,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 		let memedImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
 		UIGraphicsEndImageContext()
 		
-		// TODO: Show toolbar and navbar
-//		navBar.frame.size.height = navHeight
-//		toolBar.frame.size.height = toolHeight
 		navBar.isHidden = false
 		toolBar.isHidden = false
-//		self.view.updateConstraintsIfNeeded()
-//		self.view.setNeedsLayout()
-//		self.view.layoutIfNeeded()
+
 		memeImage.frame.origin.y += navBar.frame.size.height
 		memeImage.frame.size.height -= navBar.frame.size.height + toolBar.frame.size.height
-		topTextField.frame.origin.y += navBar.frame.size.height
-		bottomTextField.frame.origin.y -= toolBar.frame.size.height
- //		self.view.frame.origin.y += navBar.frame.size.height
-//		self.view.frame.size.height -= navBar.frame.size.height + toolBar.frame.size.height
-//		memeImage.frame.size.height -= navBar.frame.size.height + toolBar.frame.size.height
 		
 		return memedImage
 	}
