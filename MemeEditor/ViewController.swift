@@ -20,7 +20,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 	@IBOutlet weak var toolBar: UIToolbar!
 	
 	// Struct to store meme when using save function and future functionality
-	struct Meme {
+	struct MemeModel {
 		let topText: String
 		let bottomText: String
 		let originalImage: UIImage
@@ -28,7 +28,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 	}
 	
 	// Optional instance of Meme struct to hold meme after "saving"
-	var meme: Meme?
+	var memeModel: MemeModel?
 	// Variable to keep track of active text field to be used to slide up current view
 	var activeTextField: UITextField?
 	
@@ -160,7 +160,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 		let shareViewController = UIActivityViewController(activityItems: [memedImage], applicationActivities: nil)
 		// Present the share view contrller and on completion save the meme Image, text and original image into meme.
 		present(shareViewController, animated: true) {
-			self.meme = Meme(topText: self.topTextField.text!, bottomText: self.bottomTextField.text!, originalImage: self.memeImage.image!, memedImage: memedImage)
+			self.memeModel = MemeModel(topText: self.topTextField.text!, bottomText: self.bottomTextField.text!, originalImage: self.memeImage.image!, memedImage: memedImage)
 		}
 	}
 	
