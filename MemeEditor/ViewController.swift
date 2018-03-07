@@ -32,13 +32,19 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 	// Variable to keep track of active text field to be used to slide up current view
 	var activeTextField: UITextField?
 	
-	// Define the text attributes for the meme text. black stroke, white text, Helvetica font
-	// -3.0 stroke widht needed for the stroke to apply to the exterior so the font color will work
-	let memeTextAttributes:[String:Any] = [
-		NSAttributedStringKey.strokeColor.rawValue: UIColor.black,
-		NSAttributedStringKey.foregroundColor.rawValue: UIColor.white,
-		NSAttributedStringKey.font.rawValue: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
-		NSAttributedStringKey.strokeWidth.rawValue: -3.0]
+	// Format the selected textField with Meme styling and center it, set self as the delegate
+	func configureText(textField: UITextField, withText text: String) {
+		// Define the text attributes for the meme text. black stroke, white text, Helvetica font
+		// -3.0 stroke width needed for the stroke to apply to the exterior so the font color will work
+		let memeTextAttributes:[String:Any] = [
+			NSAttributedStringKey.strokeColor.rawValue: UIColor.black,
+			NSAttributedStringKey.foregroundColor.rawValue: UIColor.white,
+			NSAttributedStringKey.font.rawValue: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
+			NSAttributedStringKey.strokeWidth.rawValue: -3.0]
+		textField.defaultTextAttributes = memeTextAttributes
+		textField.textAlignment = .center
+		textField.delegate = self
+	}
 	
 	// MARK: UIImagePickerControllerDelegate functions
 	// Handles user cancellation of image picker
@@ -77,17 +83,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 		super.viewDidLoad()
 		// Do any additional setup after loading the view, typically from a nib.
 		// Set up default text field values
-		topTextField.text = "TOP"
-		topTextField.defaultTextAttributes = memeTextAttributes
-		topTextField.textAlignment = .center
-		
-		bottomTextField.text = "BOTTOM"
-		bottomTextField.defaultTextAttributes = memeTextAttributes
-		bottomTextField.textAlignment = .center
-		
-		// Set delegates
-		topTextField.delegate = self
-		bottomTextField.delegate = self
+		configureText(textField: topTextField, withText: "TOP")
+		configureText(textField: bottomTextField, withText: "BOTTOM")
 		
 		shareButton.isEnabled = false
 	}
@@ -137,20 +134,20 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 	// MARK: IBAction functions
 	// Pick image from library
 	@IBAction func pickImage(_ sender: Any) {
-		// Create image picker and present it
-		let pickerController = UIImagePickerController()
-		pickerController.delegate = self
-		pickerController.sourceType = .photoLibrary
-		present(pickerController, animated: true, completion: nil)
+		configureImagePicker(with: .camera)
 	}
 	
 	// Pick image from Camera
 	@IBAction func pickImageFromCamera(_ sender: Any) {
-		// Create image picker and present it
-		let pickerController = UIImagePickerController()
-		pickerController.delegate = self
-		pickerController.sourceType = .camera
-		present(pickerController, animated: true, completion: nil)
+		configureImagePicker(with: .photoLibrary)
+	}
+	
+	// Create image picker and present it, using the sourceType parameter to determine the sourceType
+	func configureImagePicker(with sourceType: UIImagePickerControllerSourceType) {
+		let imagePickerController = UIImagePickerController()
+		imagePickerController.sourceType = sourceType
+		imagePickerController.delegate = self
+		present(imagePickerController, animated: true, completion: nil)
 	}
 	
 	// Share button pressed
@@ -158,10 +155,20 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 		// Generate the meme Image
 		let memedImage = generateMemedImage()
 		let shareViewController = UIActivityViewController(activityItems: [memedImage], applicationActivities: nil)
-		// Present the share view contrller and on completion save the meme Image, text and original image into meme.
-		present(shareViewController, animated: true) {
-			self.memeModel = MemeModel(topText: self.topTextField.text!, bottomText: self.bottomTextField.text!, originalImage: self.memeImage.image!, memedImage: memedImage)
+		// on completion of sharing the meme, save the meme
+		shareViewController.completionWithItemsHandler = { (_,successful,_,_) in
+			if successful {
+				// call save method here
+				self.saveMeme(with: memedImage)
+			}
 		}
+		// Present the share view controller
+		present(shareViewController, animated: true)
+	}
+	
+	// Save the memedImage, text and original image into memeModel.
+	func saveMeme(with memedImage: UIImage) {
+		self.memeModel = MemeModel(topText: self.topTextField.text!, bottomText: self.bottomTextField.text!, originalImage: self.memeImage.image!, memedImage: memedImage)
 	}
 	
 	// Cancel button pressed
@@ -181,11 +188,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 	// image we can save that shows the whole Meme Image.
 	func generateMemedImage() -> UIImage {
 		
-		navBar.isHidden = true
-		toolBar.isHidden = true
-
-		memeImage.frame.origin.y -= navBar.frame.size.height
-		memeImage.frame.size.height += navBar.frame.size.height + toolBar.frame.size.height
+		toggleBars()
 		
 		// Render view to an image
 		UIGraphicsBeginImageContext(self.view.frame.size)
@@ -193,13 +196,23 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 		let memedImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
 		UIGraphicsEndImageContext()
 		
-		navBar.isHidden = false
-		toolBar.isHidden = false
-
-		memeImage.frame.origin.y += navBar.frame.size.height
-		memeImage.frame.size.height -= navBar.frame.size.height + toolBar.frame.size.height
+		toggleBars()
 		
 		return memedImage
+	}
+	
+	func toggleBars() {
+		if navBar.isHidden {
+			navBar.isHidden = false
+			toolBar.isHidden = false
+			memeImage.frame.origin.y += navBar.frame.size.height
+			memeImage.frame.size.height -= navBar.frame.size.height + toolBar.frame.size.height
+		} else {
+			navBar.isHidden = true
+			toolBar.isHidden = true
+			memeImage.frame.origin.y -= navBar.frame.size.height
+			memeImage.frame.size.height += navBar.frame.size.height + toolBar.frame.size.height
+		}
 	}
 }
 
