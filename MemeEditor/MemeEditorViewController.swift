@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
+class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
 	
 	// MARK: IBOutlets for UI Elements
 	@IBOutlet weak var memeImage: UIImageView!
@@ -19,16 +19,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 	@IBOutlet weak var navBar: UINavigationBar!
 	@IBOutlet weak var toolBar: UIToolbar!
 	
-	// Struct to store meme when using save function and future functionality
-	struct MemeModel {
-		let topText: String
-		let bottomText: String
-		let originalImage: UIImage
-		let memedImage: UIImage
+	// Hide the status bar
+	override var prefersStatusBarHidden: Bool {
+		return true
 	}
 	
 	// Optional instance of Meme struct to hold meme after "saving"
 	var memeModel: MemeModel?
+	
 	// Variable to keep track of active text field to be used to slide up current view
 	var activeTextField: UITextField?
 	
@@ -105,7 +103,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 		// when the keyboard activates, look at the activeTextField in order to shift the view up if needed for
 		// the bottom text field.
 		if activeTextField == bottomTextField {
-			view.frame.origin.y -= getKeyboardHeight(notification)
+			view.frame.origin.y = -getKeyboardHeight(notification)
+		} else {
+			view.frame.origin.y = 0
 		}
 	}
 	
@@ -116,9 +116,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 	
 	// Calculate the keyboard height in order to shift the view if needed.
 	func getKeyboardHeight(_ notification: Notification) -> CGFloat {
-		let userInfo = notification.userInfo
-		let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue
-		return keyboardSize.cgRectValue.height
+		if let keyboardSize = notification.userInfo![UIKeyboardFrameEndUserInfoKey] as? NSValue {
+			return keyboardSize.cgRectValue.height
+		} else {
+			return CGFloat(0)
+		}
 	}
 	
 	func subscribeToKeyboardNotifications() {
