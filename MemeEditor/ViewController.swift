@@ -134,12 +134,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 	// MARK: IBAction functions
 	// Pick image from library
 	@IBAction func pickImage(_ sender: Any) {
-		configureImagePicker(with: .camera)
+		configureImagePicker(with: .photoLibrary)
 	}
 	
 	// Pick image from Camera
 	@IBAction func pickImageFromCamera(_ sender: Any) {
-		configureImagePicker(with: .photoLibrary)
+		configureImagePicker(with: .camera)
 	}
 	
 	// Create image picker and present it, using the sourceType parameter to determine the sourceType
